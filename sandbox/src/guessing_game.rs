@@ -1,6 +1,4 @@
 /*
-    $ make run
-
     Guess the number!
     The secret number is: 77
     Please input your guess.
@@ -20,7 +18,7 @@ use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 
-fn main() {
+pub fn play() {
     println!("Guess the number!");
 
     // generate secret number
