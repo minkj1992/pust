@@ -30,3 +30,22 @@ pub fn run(c: Config) -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    vec![]
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn one_result() {
+        let q = "leoo";
+        let contents = "\
+leoo:
+korean, internet computer, GOAT.";
+
+        assert_eq!(vec!["leoo"], search(q, contents));
+    }
+}
