@@ -1,41 +1,6 @@
+use cli::Config;
 use std::env;
-use std::error::Error;
-use std::fs::File;
-use std::io::prelude::*;
 use std::process;
-
-const ARGS_NUM: usize = 2;
-
-// infra logic
-struct Config {
-    query: String,
-    filename: String,
-}
-
-impl Config {
-    fn build(args: &[String]) -> Result<Config, &'static str> {
-        // 1 represents(args[0]) current program's name
-        if args.len() != (ARGS_NUM + 1) {
-            return Err("invalid number of args are given.");
-        }
-
-        Ok(Config {
-            query: args[1].clone(),
-            filename: args[2].clone(),
-        })
-    }
-}
-
-// business logic
-fn run(c: Config) -> Result<(), Box<dyn Error>> {
-    let mut f = File::open(c.filename)?;
-
-    let mut buf = String::new();
-    f.read_to_string(&mut buf)?;
-
-    println!("With text:\n{}", buf);
-    Ok(())
-}
 
 // cli logic
 fn main() {
@@ -48,10 +13,10 @@ fn main() {
         });
     }
 
-    println!("Searching for '{}' in {}.", c.query, c.filename);
+    println!("Searching for '{}' in {}.", c.query, c.file_path);
 
-    if let Err(e) = run(c) {
-        println!("Application error: {}", e);
+    if let Err(e) = cli::run(c) {
+        println!("Application error: {e}");
         process::exit(1);
     }
 }
