@@ -12,7 +12,6 @@ fn main() {
             process::exit(1);
         });
     }
-
     println!("Searching for '{}' in {}.", c.query, c.file_path);
 
     if let Err(e) = cli::run(c) {
