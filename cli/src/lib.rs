@@ -14,25 +14,36 @@ impl_scope! {
 
 impl Config {
     pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        if let Err(e) = Self::validate(args) {
+        if let Err(e) = Self::validate_args_num(args) {
             return Err(e);
         }
-        let ignore_case = env::var("IGNORE_CASE").is_ok();
 
-        Ok(Config {
-            query: args[1].clone(),
-            file_path: args[2].clone(),
-            ignore_case,
-        })
+        if env::var("IGNORE_CASE").is_ok() {
+            Ok(Config {
+                query: args[1].clone(),
+                file_path: args[2].clone(),
+                ..Default::default()
+            })
+        } else {
+            Ok(Config {
+                query: args[1].clone(),
+                file_path: args[2].clone(),
+                ignore_case: true,
+            })
+        }
     }
 
-    fn validate(args: &[String]) -> Result<(), &'static str> {
+    fn validate_args_num(args: &[String]) -> Result<(), &'static str> {
         let args_num: usize = 3;
+        let req_args_num: usize = 2;
         let n = args.len() - 1;
 
         // 1 represents(args[0]) current program's name
         if n > args_num {
             return Err("over arguments");
+        }
+        if n < req_args_num {
+            return Err("not enough arguments");
         }
         Ok(())
     }
@@ -95,7 +106,7 @@ mod tests {
     }
 
     #[test]
-    fn with_capital() {
+    fn case_sensitive() {
         let query = "duct";
         let contents = "\
 Rust:

@@ -10,3 +10,10 @@ Rust 커뮤니티는 `main` 리펙토링에 대해 아래와 같은 가이드라
     2. 다른 환경들 설정
     3. `lib.rs`의 `run` 함수 호출
     4. `run`이 에러를 리턴하면, 에러 처리.
+
+
+```js
+# cargo run <키워드> poem.txt
+$ IGNORE_CASE=1 cargo run  poem.txt
+$ cargo run rust poem.txt
+```
