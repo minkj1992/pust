@@ -1,4 +1,5 @@
 use impl_tools::impl_scope;
+use std::env;
 use std::error::Error;
 use std::fs;
 
@@ -16,25 +17,22 @@ impl Config {
         if let Err(e) = Self::validate(args) {
             return Err(e);
         }
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
 
         Ok(Config {
             query: args[1].clone(),
             file_path: args[2].clone(),
-            ..Default::default()
+            ignore_case,
         })
     }
 
     fn validate(args: &[String]) -> Result<(), &'static str> {
         let args_num: usize = 3;
-        let req_args_num: usize = 2;
         let n = args.len() - 1;
 
         // 1 represents(args[0]) current program's name
         if n > args_num {
             return Err("over arguments");
-        }
-        if n < req_args_num {
-            return Err("not enough arguments");
         }
         Ok(())
     }
@@ -100,10 +98,10 @@ mod tests {
     fn with_capital() {
         let query = "duct";
         let contents = "\
-    Rust:
-    safe, fast, productive.
-    Pick three.
-    Duct tape.";
+Rust:
+safe, fast, productive.
+Pick three.
+Duct tape.";
 
         assert_eq!(vec!["safe, fast, productive."], search(query, contents));
     }
@@ -112,10 +110,10 @@ mod tests {
     fn case_insensitive() {
         let query = "rUsT";
         let contents = "\
-    Rust:
-    safe, fast, productive.
-    Pick three.
-    Trust me.";
+Rust:
+safe, fast, productive.
+Pick three.
+Trust me.";
 
         assert_eq!(
             vec!["Rust:", "Trust me."],
