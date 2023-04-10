@@ -1,2 +1,4 @@
-# Practice Rust
-> learn rust based on practical rust projects.
+# **P**rojects **Rust** (`pust`)
+> Learning `rust` based on practical projects.
+
+
