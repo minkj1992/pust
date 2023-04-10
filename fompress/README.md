@@ -1,5 +1,5 @@
 # fompress
 
 ```sh
-cargo run -- -s bitcoin.pdf -t cmp_bitcoin.pdf
+RUST_BACKTRACE=1  cargo run -- -s ./bitcoin.pdf
 ```
