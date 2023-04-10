@@ -6,6 +6,6 @@
 
 ```bash
 # compress file projects
-cargo new fompress --edition 2021
+cargo new compress --edition 2021
 ```
 
