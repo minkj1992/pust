@@ -1,21 +1,24 @@
-use cli::Config;
-use std::env;
-use std::process;
+use std::sync::{Arc, Mutex};
+use std::thread;
 
-// cli logic
 fn main() {
-    let c: Config;
-    {
-        let args: Vec<String> = env::args().collect();
-        c = Config::build(&args).unwrap_or_else(|err| {
-            eprintln!("Problem parsing args: '{err}'");
-            process::exit(1);
-        });
-    }
-    println!("Searching for '{}' in {}.", c.query, c.file_path);
+    let counter = Arc::new(Mutex::new(0)); // 이 부분 변경됨
+    let mut handles = vec![];
 
-    if let Err(e) = cli::run(c) {
-        eprintln!("Application error: {e}");
-        process::exit(1);
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter); // 이 부분 변경됨.
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
     }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
 }
+// Result: 10
