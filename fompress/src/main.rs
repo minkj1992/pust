@@ -1,10 +1,11 @@
 use std::fs::File;
 use std::io::{copy, BufReader};
-use std::path::PathBuf;
+use std::os::unix::prelude::MetadataExt;
+use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 use clap::Parser;
-use flate2::write::ZlibEncoder;
+use flate2::write::{GzEncoder, ZlibEncoder};
 use flate2::Compression;
 
 #[derive(Parser)]
@@ -12,8 +13,6 @@ use flate2::Compression;
 struct Cli {
     #[arg(short, long)]
     source: PathBuf,
-    #[arg(short, long)]
-    target: PathBuf,
 }
 
 #[inline(always)]
@@ -21,18 +20,33 @@ fn read_file(s: PathBuf) -> BufReader<File> {
     BufReader::new(File::open(s).unwrap())
 }
 
-fn compress_write_file(mut r: BufReader<File>, w: File) -> File {
+fn zlib_compress_write_file(mut r: BufReader<File>, w: File) -> File {
     let mut enc = ZlibEncoder::new(w, Compression::default());
+    copy(&mut r, &mut enc).unwrap();
+    enc.finish().unwrap()
+}
+
+fn gz_compress_write_file(mut r: BufReader<File>, w: File) -> File {
+    let mut enc = GzEncoder::new(w, Compression::default());
     copy(&mut r, &mut enc).unwrap();
     enc.finish().unwrap()
 }
 
 fn main() {
     let cli = Cli::parse();
+    let src_file_name = cli.source.file_stem().unwrap().to_str().unwrap();
+    let zlib_output = File::create(Path::new(&format!("zlib_{}", src_file_name))).unwrap();
+    let gz_output = File::create(Path::new(&format!("gz_{}", src_file_name))).unwrap();
 
+    // 1. Zlib compress
     let start = Instant::now();
-    let output = compress_write_file(read_file(cli.source), File::create(cli.target).unwrap());
-    println!("Elapsed: {:?}", start.elapsed());
+    let output = zlib_compress_write_file(read_file(cli.source.clone()), zlib_output);
+    println!("Zlib Elapsed : {:?}", start.elapsed());
+    println!("Zlib target size: {:?}", output.metadata().unwrap().size());
 
-    println!("Target metadata: {:?}", output.metadata().unwrap());
+    // 2. Gz compress
+    let start = Instant::now();
+    let output = gz_compress_write_file(read_file(cli.source.clone()), gz_output);
+    println!("Gz Elapsed : {:?}", start.elapsed());
+    println!("Gz target size: {:?}", output.metadata().unwrap().size());
 }
