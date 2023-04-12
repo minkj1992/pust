@@ -3,32 +3,48 @@ use std::path::PathBuf;
 
 #[derive(Clone, Debug)]
 pub struct Config {
+    pub cmd: Cmd,
     pub src: PathBuf,
+    pub dest: PathBuf,
 }
 
-// TODO: Check why should we use this impl.
 impl Default for Config {
     fn default() -> Config {
         Config {
+            cmd: Cmd::default(),
             src: PathBuf::default(),
+            dest: PathBuf::default(),
         }
     }
 }
 
+#[derive(Clone, Debug)]
+pub enum Cmd {
+    Read,
+    Write,
+}
+
+impl Default for Cmd {
+    fn default() -> Self {
+        Cmd::Read
+    }
+}
+
+// args read <SRC>
+// args write <DEST>
 impl Config {
-    const VALID_ARGS_LEN: usize = 1;
+    const VALID_ARGS_LEN: usize = 2;
 
     fn get_args() -> Result<Vec<String>, String> {
         fn is_valid(args: &Vec<String>) -> bool {
             return if args.len() == Config::VALID_ARGS_LEN + 1 {
                 true
             } else {
-                false
+                true
             };
         }
 
         let args: Vec<String> = std::env::args().collect();
-
         if !is_valid(&args) {
             let msg = format!("Must pass {} args.", Config::VALID_ARGS_LEN - 1);
             return Err(msg);
@@ -37,11 +53,22 @@ impl Config {
     }
 
     fn build(&mut self) {
-        let args = match Config::get_args() {
-            Ok(a) => a,
-            Err(e) => panic!("{}", e),
+        let args = Config::get_args().unwrap();
+
+        match args[1].to_uppercase().as_str() {
+            "READ" => {
+                self.cmd = Cmd::Read;
+                self.src = PathBuf::from(args[2].clone());
+            }
+            "WRITE" => {
+                self.cmd = Cmd::Write;
+                self.dest = PathBuf::from(args[2].clone());
+            }
+            _ => panic!(
+                "{}",
+                "Invalid Command, You should type cmd within READ or WRITE."
+            ),
         };
-        self.src = PathBuf::from(args[1].clone());
     }
 }
 
