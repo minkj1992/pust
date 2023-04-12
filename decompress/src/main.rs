@@ -11,7 +11,12 @@ struct Config {
 }
 
 impl Config {
-    const VALID_LEN: [usize; 2] = [2, 3];
+    const WITHOUT_OUT_DIR_ARGS_LEN: usize = 2;
+    const WITH_OUT_DIR_ARGS_LEN: usize = 3;
+    const VALID_LEN: [usize; 2] = [
+        Config::WITHOUT_OUT_DIR_ARGS_LEN,
+        Config::WITH_OUT_DIR_ARGS_LEN,
+    ];
 
     fn new(args: &Vec<String>) -> Result<Config, &str> {
         if !Config::is_valid(&args) {
@@ -20,7 +25,7 @@ impl Config {
         let src = PathBuf::from(&args[1].clone());
 
         let dest = match args.len() {
-            2 => PathBuf::from(src.clone().file_stem().unwrap()),
+            Config::WITHOUT_OUT_DIR_ARGS_LEN => PathBuf::from(src.clone().file_stem().unwrap()),
             _ => PathBuf::from(&args[2].clone()),
         };
 
