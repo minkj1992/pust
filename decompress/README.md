@@ -1,7 +1,7 @@
 # decompress
 
 ```sh
-$ cargo run *.zip
+$ cargo run *.zip ./unzipped/
 
 Okay: <target/debug/decompress>
 File 0 extracted to "ethereum/"

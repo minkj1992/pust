@@ -1,40 +1,45 @@
 use std::fs::{create_dir_all, set_permissions, File, Permissions};
 use std::io::copy;
-use std::path::Path;
+use std::path::PathBuf;
 use std::process::ExitCode;
 
 use zip::ZipArchive;
 
-fn check_args(args: &Vec<String>) -> bool {
-    if args.len() == 2 {
-        println!("Okay: <{}>", args[0]);
-        return true;
-    }
-    return false;
+struct Config {
+    src: PathBuf,
+    dest: PathBuf,
 }
 
-fn check_comment(i: usize, comment: &str) {
-    if !(comment.is_empty()) {
-        println!("File {} comment: {}", i, comment);
+impl Config {
+    fn new(args: &Vec<String>) -> Result<Config, &str> {
+        if Config::check(&args) {
+            return Err("Must pass 3 arguments, source dir and target dir");
+        }
+        Ok(Config {
+            src: PathBuf::from(&args[1].clone()),
+            dest: PathBuf::from(&args[2].clone()),
+        })
+    }
+    #[inline]
+    fn check(args: &Vec<String>) -> bool {
+        return if args.len() == 2 { true } else { false };
     }
 }
 
-#[inline(always)]
-fn is_dir(name: &str) -> bool {
-    (*name).ends_with('/')
-}
-
-// https://doc.rust-lang.org/stable/std/process/struct.ExitCode.html#associatedconstant.SUCCESS
-fn main() -> ExitCode {
-    let args: Vec<String> = std::env::args().collect();
-    if check_args(&args) == false {
-        return ExitCode::FAILURE;
+fn decompress(src: PathBuf) {
+    fn check_comment(i: usize, comment: &str) {
+        if !(comment.is_empty()) {
+            println!("File {} comment: {}", i, comment);
+        }
     }
 
-    let p = Path::new(&*args[1]);
-    let file = File::open(p).unwrap();
+    #[inline]
+    fn is_dir(name: &str) -> bool {
+        (*name).ends_with('/')
+    }
 
-    let mut archive = ZipArchive::new(file).unwrap();
+    let source = File::open(src).unwrap();
+    let mut archive = ZipArchive::new(source).unwrap();
     for i in 0..archive.len() {
         let mut zip_file = archive.by_index(i).unwrap();
         let out_path = match zip_file.enclosed_name() {
@@ -73,5 +78,19 @@ fn main() -> ExitCode {
             }
         }
     }
+}
+
+// https://doc.rust-lang.org/stable/std/process/struct.ExitCode.html#associatedconstant.SUCCESS
+fn main() -> ExitCode {
+    let args: Vec<String> = std::env::args().collect();
+    let cfg = match Config::new(&args) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("{}", e);
+            return ExitCode::FAILURE;
+        }
+    };
+
+    decompress(cfg.src);
     return ExitCode::SUCCESS;
 }
