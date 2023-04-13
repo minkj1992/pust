@@ -6,7 +6,6 @@ use serde::{Deserialize, Serialize};
 mod config;
 
 fn read_from_file(p: &str) -> Result<(), Box<dyn Error>> {
-    println!("{:?}", env::current_dir());
     let mut rdr = csv::Reader::from_path(p)?;
 
     for result in rdr.records() {

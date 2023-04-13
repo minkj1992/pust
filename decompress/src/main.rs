@@ -111,5 +111,5 @@ fn main() -> ExitCode {
 
     fs::create_dir_all(&cfg.dest).unwrap();
     decompress(cfg.src, cfg.dest);
-    return ExitCode::SUCCESS;
+    ExitCode::SUCCESS
 }
