@@ -51,4 +51,20 @@ mod tests {
         
         assert_eq!(given, expect);
     }
+
+    #[test]
+    fn should_parse_json_to_users() {
+        let expect: Vec<User> = Vec::from([
+            User { id: 1, name: "leoo", surname: "je" }, 
+            User { id: 2, name: "minwook", surname: "je" }, 
+            User { id: 3, name: "john", surname: "park" }, 
+            User { id: 4, name: "seray", surname: "uzgur" }, 
+            User { id: 5, name: "kamil", surname: "bukum" }, 
+            User { id: 6, name: "hasan", surname: "mumin" },
+        ]);
+
+        let given: Vec<User> = serde_json::from_str(consts::RAW_USERS).unwrap();
+        
+        assert_eq!(given, expect);
+    }
 }

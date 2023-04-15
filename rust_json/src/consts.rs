@@ -29,7 +29,7 @@ pub const RAW_USERS: &str = r#"
         "id": 6,
         "name": "hasan",
         "surname": "mumin"
-    },
+    }
 ]
 "#;
 
