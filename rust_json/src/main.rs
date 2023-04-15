@@ -17,22 +17,25 @@ struct Cli {
 }
 
 fn main() {
-    println!("############1. deserialize (json -> dto)############");
-    let articles: Vec<dto::Article> = serde_json::from_str(consts::RAW_ARTICLES).unwrap();
-    let users: Vec<dto::User> = serde_json::from_str(consts::RAW_USERS).unwrap();
-    println!("{:#?}", articles);
-    println!("{:#?}", users);
+    // 1. deserialize from raw string consts.
+    let (articles, users) = read_from_consts();
 
-    println!("############2. serialize (dto -> json)############");
+    // 2. serialize (dto -> json)
     let data = serialize(&articles, &users);
     println!("{:?}", data);
 
-    println!("############3. write file############");
+    // 3. write file
     let cli = Cli::parse();
     let _ = write_file(cli.out_dir.clone(), data);
 
-    println!("############4. read json file############");
+    // 4. read json file
     let _ = read_file(cli.out_dir);
+}
+
+fn read_from_consts<'a>() -> (Vec<dto::Article<'a>>, Vec<dto::User<'a>>) {
+    let articles: Vec<dto::Article> = serde_json::from_str(consts::RAW_ARTICLES).unwrap();
+    let users: Vec<dto::User> = serde_json::from_str(consts::RAW_USERS).unwrap();
+    return (articles, users);
 }
 
 fn serialize(articles: &Vec<dto::Article>, users: &Vec<dto::User>) -> serde_json::Value {
