@@ -1,29 +1,3 @@
-# rust json
-> with serde
-
-- [serde: deserialize](https://serde.rs/impl-deserialize.html)
-
-- [x] custom desrializer
-- [x] custom type with vec
-- [x] nested json string to custom types
-- [x] unit test
-- [x] write to .json formatted file.
-
-```sh
-cargo run -- -o ./output.json
-```
-
-
-## process
-
-1. Deserialize raw string from consts.rs to dto objects.
-2. Modify structure and serialize.
-3. Write file to out_dir.
-
-
-## output example
-
-```json
 {
   "articles": [
     {
@@ -120,4 +94,3 @@ cargo run -- -o ./output.json
     }
   ]
 }
-```

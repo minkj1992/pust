@@ -1,3 +1,6 @@
+// User: Article = 1:n
+// Tag: Article = n:m
+
 pub const RAW_USERS: &str = r#"
 [
     {
