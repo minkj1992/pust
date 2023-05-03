@@ -1,6 +1,10 @@
 {
-  "id": 1,
-  "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-  "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
-  "userId": 1
+  "status": "200",
+  "headers": "{\"date\": \"Wed, 03 May 2023 06:37:35 GMT\", \"content-type\": \"application/json; charset=utf-8\", \"content-length\": \"292\", \"connection\": \"keep-alive\", \"x-powered-by\": \"Express\", \"x-ratelimit-limit\": \"1000\", \"x-ratelimit-remaining\": \"999\", \"x-ratelimit-reset\": \"1682153047\", \"vary\": \"Origin, Accept-Encoding\", \"access-control-allow-credentials\": \"true\", \"cache-control\": \"max-age=43200\", \"pragma\": \"no-cache\", \"expires\": \"-1\", \"x-content-type-options\": \"nosniff\", \"etag\": \"W/\\\"124-yiKdLzqO5gfBrJFrcdJ8Yq0LGnU\\\"\", \"via\": \"1.1 vegur\", \"cf-cache-status\": \"HIT\", \"age\": \"18179\", \"accept-ranges\": \"bytes\", \"report-to\": \"{\\\"endpoints\\\":[{\\\"url\\\":\\\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=a2ZOyPS1VoQ1649C5RLpf7irIBTFA2wIx%2FFMNviahp3zM9E%2BTgGdP4j%2FiMd9gvK08CZgBXrJ%2FmW2D9%2FmY2hmlXn0xk%2B3knIxFuCYUW7N9muPZpiQVXEv8lazzY13BVdlbI7woe4RT5giokMd2wug\\\"}],\\\"group\\\":\\\"cf-nel\\\",\\\"max_age\\\":604800}\", \"nel\": \"{\\\"success_fraction\\\":0,\\\"report_to\\\":\\\"cf-nel\\\",\\\"max_age\\\":604800}\", \"server\": \"cloudflare\", \"cf-ray\": \"7c167f08edfa80fb-NRT\", \"alt-svc\": \"h3=\\\":443\\\"; ma=86400, h3-29=\\\":443\\\"; ma=86400\"}",
+  "body": {
+    "id": 1,
+    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
+    "userId": 1
+  }
 }
